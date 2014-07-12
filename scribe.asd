@@ -6,5 +6,6 @@
   :author "Alex Muscar"
   :license "MIT"
   :components ((:file "package")
+	       (:file "utils")
                (:file "scribe")))
 
