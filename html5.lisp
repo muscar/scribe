@@ -1,16 +1,20 @@
-(in-package #:scribe)
+(in-package #:scribe.output.html5)
 
-(defcommand :title (title)
+(define-driver-definer define-html5 :html5)
+
+(define-html5 :title (title)
   (format *document-output* "<h1>~a</h1>~%" title))
 
-(defcommand :bold (text)
+(define-html5 :para (&rest fragments)
+  (format *document-output* "<p>~%")
+  (emit-fragments :tex fragments)
+  (format *document-output* "</p>~%"))
+
+(define-html5 :bold (text)
   (format *document-output* "<strong>~a</strong>" text))
 
-(defcommand :italic (text)
+(define-html5 :italic (text)
   (format *document-output* "<em>~a</em>" text))
 
-(defcommand :raw-string (text)
+(define-html5 :raw-string (text)
   (format *document-output* "~a" text))
-
-(defcommand :break ()
-  (format *document-output* "<br/>~%"))

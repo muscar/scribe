@@ -53,31 +53,11 @@
 	(:title (setf (document-title new-document) (second fragment)))
 	(t (push fragment acc))))))
 
-(defparameter *document-output* nil)
-
-(defgeneric emit (op &rest args)
-  (:documentation "Emit markup for one virtual op."))
-
-(defun emit-fragments (fragments)
-  (dolist (fragment fragments)
-    (emit (first fragment) (second fragment))))
-
-(defun compile-document (document out)
+(defun compile-document (driver document out)
   (let ((*document-output* out))
-    (emit :title (document-title document))
+    (emit driver :title (document-title document))
     (loop for op across (document-body document)
-       do (apply #'emit (first op) (rest op)))))
+       do (apply #'emit driver op))))
 
-(defmacro defcommand (name pattern &rest forms)
-  (let ((g!args (gensym "args")))
-    `(defmethod emit ((op (eql ,name)) &rest ,g!args)
-       ; XXX Ugly code
-       ,@(if pattern
-	     `((destructuring-bind ,pattern ,g!args
-		 ,@forms))
-	     `((declare (ignore ,g!args))
-	       ,@forms)))))
-
-(defun process (path &key output)
-  (load output)
-  (compile-document (decode-document (read-document path)) t))
+(defun process (path &key driver)
+  (compile-document driver (decode-document (read-document path)) t))

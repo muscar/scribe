@@ -1,17 +1,19 @@
-(in-package #:scribe)
+(in-package #:scribe.output.tex)
 
-(defcommand :title (title)
-  (format *document-output* "\\title{~a}~%\\maketitle~%" title))
+(define-driver-definer define-tex :tex)
 
-(defcommand :para (&rest fragments)
-  (emit-fragments fragments)
+(define-tex :title (title)
+  (format *document-output* "\\title{~a}~%\\maketitle~%~%" title))
+
+(define-tex :para (&rest fragments)
+  (emit-fragments :tex fragments)
   (format t "~%~%"))
 
-(defcommand :bold (text)
+(define-tex :bold (text)
   (format *document-output* "\\textbf{~a}" text))
 
-(defcommand :italic (text)
+(define-tex :italic (text)
   (format *document-output* "\\emph{~a}" text))
 
-(defcommand :raw-string (text)
+(define-tex :raw-string (text)
   (format *document-output* "~a" text))

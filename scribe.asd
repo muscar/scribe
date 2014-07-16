@@ -7,5 +7,8 @@
   :license "MIT"
   :components ((:file "package")
 	       (:file "utils")
+	       (:file "output")
+	       (:file "tex")
+	       (:file "html5")
                (:file "scribe")))
 
